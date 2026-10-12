@@ -183,6 +183,21 @@
 </script>
 {{- end }}
 
+{{- /* Keep automatic theme selection in sync with system appearance. */}}
+{{- if (and (ne site.Params.defaultTheme "light") (ne site.Params.defaultTheme "dark")) }}
+<script>
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+        {{- if (not site.Params.disableThemeToggle) }}
+        const preference = localStorage.getItem("pref-theme");
+        if (preference === "light" || preference === "dark") {
+            return;
+        }
+        {{- end }}
+        document.querySelector("html").dataset.theme = event.matches ? 'dark' : 'light';
+    });
+</script>
+{{- end }}
+
 {{- partial "extend_head.html" . -}}
 
 {{- /* Misc */}}
